@@ -23,31 +23,21 @@ export default class CloudHostTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async callingSpinupInstantiatesHostClient() {
+    protected static async callingSpinupCallsHostClient() {
         let wasHit = false
-
-        CloudHostImpl.client = () => {
-            wasHit = true
-            return this.FakeClient()
-        }
-
-        await this.spinupHost()
-
-        assert.isTrue(wasHit)
-    }
-
-    @test()
-    protected static async callingSpinupPassesApiTokenToClient() {
         let token = ''
 
         CloudHostImpl.client = (apiToken: string) => {
+            wasHit = true
             token = apiToken
             return this.FakeClient()
         }
 
         await this.spinupHost()
 
-        assert.isEqual(token, this.apiToken)
+        assert.isTrue(wasHit, 'Client was not called!')
+        assert.isTruthy(token, 'Token was not passed to client!')
+        assert.isEqual(token, this.apiToken, 'Invalid token passed to client!')
     }
 
     @test()
