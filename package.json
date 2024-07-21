@@ -61,5 +61,8 @@
     "moduleNameMapper": {
       "^#spruce/(.*)$": "<rootDir>/build/.spruce/$1"
     }
+  },
+  "dependencies": {
+    "digitalocean": "^1.2.1"
   }
 }
