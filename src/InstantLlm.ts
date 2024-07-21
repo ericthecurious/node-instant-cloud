@@ -1,13 +1,22 @@
+import CloudHostImpl, { CloudHost } from './CloudHost'
+
 export default class InstantLlmImpl {
     public static Class?: InstantLlmConstructor
 
-    protected constructor() {}
+    protected host: CloudHost
 
-    public static Create() {
-        return new (this.Class ?? this)()
+    protected constructor(host: CloudHost) {
+        this.host = host
     }
 
-    public async run() {}
+    public static Create() {
+        const host = CloudHostImpl.Create()
+        return new (this.Class ?? this)(host)
+    }
+
+    public async run() {
+        await this.host.spinup()
+    }
 }
 
 export interface InstantLlm {
