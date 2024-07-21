@@ -1,8 +1,8 @@
-import * as digitalocean from 'digitalocean'
+import { client } from 'digitalocean'
 
 export default class CloudHostImpl implements CloudHost {
     public static Class?: CloudHostConstructor
-    public static client = digitalocean.client
+    public static client = client
 
     private apiToken: string
 
