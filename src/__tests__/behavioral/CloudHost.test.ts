@@ -3,7 +3,7 @@ import AbstractSpruceTest, {
     assert,
     generateId,
 } from '@sprucelabs/test-utils'
-import { CreateDropletOptions, DigitalOceanClient } from 'digitalocean'
+import { CreateDropletOptions, DigitalOceanClient, Droplet } from 'digitalocean'
 import CloudHostImpl, { CloudHost } from '../../CloudHost'
 import FakeDigitalOceanClient from '../testDoubles/FakeDigitalOceanClient'
 
@@ -45,7 +45,7 @@ export default class CloudHostTest extends AbstractSpruceTest {
             return this.FakeClient()
         }
 
-        await this.spinupHost()
+        await this.createHostAndSpinup()
 
         assert.isTrue(wasHit, 'Client was not called!')
         assert.isTruthy(token, 'Token was not passed to client!')
@@ -60,15 +60,16 @@ export default class CloudHostTest extends AbstractSpruceTest {
         CloudHostImpl.client = () => {
             return {
                 droplets: {
-                    create: (options: CreateDropletOptions) => {
+                    create: async (options: CreateDropletOptions) => {
                         wasHit = true
                         passedOptions = options
+                        return {} as Droplet
                     },
                 },
-            } as unknown as DigitalOceanClient
+            } as DigitalOceanClient
         }
 
-        await this.spinupHost()
+        await this.createHostAndSpinup()
 
         assert.isTrue(wasHit, 'Create was not called!')
         assert.isTruthy(passedOptions, 'Options were not passed to create!')
@@ -89,8 +90,13 @@ export default class CloudHostTest extends AbstractSpruceTest {
         } as CreateDropletOptions
     }
 
-    private static spinupHost() {
-        return this.host.spinup()
+    private static async createHostAndSpinup() {
+        const host = this.CloudHost()
+        await this.spinupHost(host)
+    }
+
+    private static spinupHost(host?: CloudHost) {
+        return (host ?? this.host).spinup()
     }
 
     private static fakeClientFunction() {
