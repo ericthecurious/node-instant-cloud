@@ -31,13 +31,13 @@ export default class CloudHostTest extends AbstractSpruceTest {
             return {} as DigitalOceanClient
         }
 
-        await this.host.spinup()
+        await this.spinupHost()
 
         assert.isTrue(wasHit)
     }
 
     @test()
-    protected static async passesApiTokenToClient() {
+    protected static async callingSpinupPassesApiTokenToClient() {
         let token = ''
 
         CloudHostImpl.client = (apiToken: string) => {
@@ -45,9 +45,13 @@ export default class CloudHostTest extends AbstractSpruceTest {
             return {} as DigitalOceanClient
         }
 
-        await this.host.spinup()
+        await this.spinupHost()
 
         assert.isEqual(token, this.apiToken)
+    }
+
+    private static spinupHost() {
+        return this.host.spinup()
     }
 
     private static CloudHost() {
