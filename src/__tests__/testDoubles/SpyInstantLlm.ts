@@ -1,9 +1,8 @@
-import CloudHostImpl from '../../CloudHost'
+import { CloudHost } from '../../CloudHost'
 import InstantLlmImpl from '../../InstantLlm'
 
 export class SpyInstantLlm extends InstantLlmImpl {
-    public constructor() {
-        const host = CloudHostImpl.Create()
+    public constructor(host: CloudHost) {
         super(host)
     }
 

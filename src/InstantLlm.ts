@@ -23,4 +23,4 @@ export interface InstantLlm {
     run(): Promise<void>
 }
 
-export type InstantLlmConstructor = new () => InstantLlm
+export type InstantLlmConstructor = new (host: CloudHost) => InstantLlm
