@@ -3,8 +3,9 @@ import AbstractSpruceTest, {
     assert,
     generateId,
 } from '@sprucelabs/test-utils'
-import { CreateDropletOptions, DigitalOceanClient, Droplet } from 'digitalocean'
+import { CreateDropletOptions, DigitalOceanClient } from 'digitalocean'
 import CloudHostImpl, { CloudHost } from '../../CloudHost'
+import FakeDigitalOceanClient from '../testDoubles/FakeDigitalOceanClient'
 
 export default class CloudHostTest extends AbstractSpruceTest {
     private static apiToken: string
@@ -96,13 +97,5 @@ export default class CloudHostTest extends AbstractSpruceTest {
 
     private static CloudHost() {
         return CloudHostImpl.Create(this.apiToken)
-    }
-}
-
-class FakeDigitalOceanClient implements DigitalOceanClient {
-    public droplets = {
-        create: async () => {
-            return {} as Droplet
-        },
     }
 }
