@@ -10,12 +10,16 @@ export default class InstantLlmImpl implements InstantLlm {
     }
 
     public static Create() {
-        const host = CloudHostImpl.Create()
+        const host = this.CloudHost()
         return new (this.Class ?? this)(host)
     }
 
     public async run() {
         await this.host.spinup()
+    }
+
+    private static CloudHost() {
+        return CloudHostImpl.Create()
     }
 }
 
