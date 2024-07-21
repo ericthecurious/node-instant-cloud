@@ -11,7 +11,7 @@ export default class CloudHostTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async canCreateInstantLlm() {
+    protected static async canCreateCloudHost() {
         assert.isTruthy(this.host)
     }
 
