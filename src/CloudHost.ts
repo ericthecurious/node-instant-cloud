@@ -15,7 +15,14 @@ export default class CloudHostImpl implements CloudHost {
     }
 
     public async spinup() {
-        CloudHostImpl.client(this.apiToken)
+        const client = CloudHostImpl.client(this.apiToken)
+
+        await client.droplets.create({
+            name: 'a',
+            region: 'b',
+            size: 'c',
+            image: 'd',
+        })
     }
 }
 

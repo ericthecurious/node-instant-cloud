@@ -7,9 +7,6 @@ declare module 'digitalocean' {
 
     export interface DropletService {
         create(options: CreateDropletOptions): Promise<Droplet>
-        get(id: number): Promise<Droplet>
-        delete(id: number): Promise<void>
-        list(): Promise<Droplet[]>
     }
 
     export interface CreateDropletOptions {

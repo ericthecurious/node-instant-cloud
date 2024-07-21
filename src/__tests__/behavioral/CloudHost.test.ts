@@ -3,7 +3,7 @@ import AbstractSpruceTest, {
     assert,
     generateId,
 } from '@sprucelabs/test-utils'
-import { DigitalOceanClient } from 'digitalocean'
+import { CreateDropletOptions, DigitalOceanClient, Droplet } from 'digitalocean'
 import CloudHostImpl, { CloudHost } from '../../CloudHost'
 
 export default class CloudHostTest extends AbstractSpruceTest {
@@ -28,7 +28,7 @@ export default class CloudHostTest extends AbstractSpruceTest {
 
         CloudHostImpl.client = () => {
             wasHit = true
-            return {} as DigitalOceanClient
+            return this.FakeClient()
         }
 
         await this.spinupHost()
@@ -42,7 +42,7 @@ export default class CloudHostTest extends AbstractSpruceTest {
 
         CloudHostImpl.client = (apiToken: string) => {
             token = apiToken
-            return {} as DigitalOceanClient
+            return this.FakeClient()
         }
 
         await this.spinupHost()
@@ -50,11 +50,60 @@ export default class CloudHostTest extends AbstractSpruceTest {
         assert.isEqual(token, this.apiToken)
     }
 
+    @test()
+    protected static async callingSpinupCallsCreateOnClient() {
+        let wasHit = false
+        let passedOptions = undefined
+
+        CloudHostImpl.client = () => {
+            return {
+                droplets: {
+                    create: (options: CreateDropletOptions) => {
+                        wasHit = true
+                        passedOptions = options
+                    },
+                },
+            } as unknown as DigitalOceanClient
+        }
+
+        await this.spinupHost()
+
+        assert.isTrue(wasHit, 'Create was not called!')
+        assert.isTruthy(passedOptions, 'Options were not passed to create!')
+
+        assert.isEqualDeep(
+            passedOptions,
+            this.createOptions(),
+            'Invalid options passed to create! Changes needed:'
+        )
+    }
+
+    private static createOptions() {
+        return {
+            name: 'a',
+            region: 'b',
+            size: 'c',
+            image: 'd',
+        } as CreateDropletOptions
+    }
+
     private static spinupHost() {
         return this.host.spinup()
     }
 
+    private static FakeClient() {
+        return new FakeDigitalOceanClient()
+    }
+
     private static CloudHost() {
         return CloudHostImpl.Create(this.apiToken)
+    }
+}
+
+class FakeDigitalOceanClient implements DigitalOceanClient {
+    public droplets = {
+        create: async () => {
+            return {} as Droplet
+        },
     }
 }
