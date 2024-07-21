@@ -6,8 +6,12 @@ export default class InstantLlmImpl {
     public static Create() {
         return new (this.Class ?? this)()
     }
+
+    public async run() {}
 }
 
-export interface InstantLlm {}
+export interface InstantLlm {
+    run(): Promise<void>
+}
 
 export type InstantLlmConstructor = new () => InstantLlm
