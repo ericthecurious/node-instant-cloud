@@ -10,6 +10,10 @@ import FakeDigitalOceanClient from '../testDoubles/FakeDigitalOceanClient'
 export default class CloudHostTest extends AbstractSpruceTest {
     private static apiToken: string
     private static host: CloudHost
+    private static hostName: string
+    private static hostRegion: string
+    private static hostSize: string
+    private static hostImage: string
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -17,6 +21,11 @@ export default class CloudHostTest extends AbstractSpruceTest {
         this.fakeClientFunction()
 
         this.apiToken = generateId()
+        this.hostName = generateId()
+        this.hostRegion = generateId()
+        this.hostSize = generateId()
+        this.hostImage = generateId()
+
         this.host = this.CloudHost()
     }
 
@@ -66,17 +75,17 @@ export default class CloudHostTest extends AbstractSpruceTest {
 
         assert.isEqualDeep(
             passedOptions,
-            this.createOptions(),
+            this.createOptions,
             'Invalid options passed to create! Changes needed:'
         )
     }
 
-    private static createOptions() {
+    private static get createOptions() {
         return {
-            name: 'a',
-            region: 'b',
-            size: 'c',
-            image: 'd',
+            name: this.hostName,
+            region: this.hostRegion,
+            size: this.hostSize,
+            image: this.hostImage,
         } as CreateDropletOptions
     }
 
@@ -96,6 +105,6 @@ export default class CloudHostTest extends AbstractSpruceTest {
     }
 
     private static CloudHost() {
-        return CloudHostImpl.Create(this.apiToken)
+        return CloudHostImpl.Create(this.apiToken, this.createOptions)
     }
 }

@@ -1,3 +1,4 @@
+import { CreateDropletOptions } from 'digitalocean'
 import CloudHostImpl, { CloudHost } from './CloudHost'
 
 export default class InstantLlmImpl implements InstantLlm {
@@ -19,7 +20,7 @@ export default class InstantLlmImpl implements InstantLlm {
     }
 
     private static CloudHost(apiToken: string) {
-        return CloudHostImpl.Create(apiToken)
+        return CloudHostImpl.Create(apiToken, {} as CreateDropletOptions)
     }
 }
 
