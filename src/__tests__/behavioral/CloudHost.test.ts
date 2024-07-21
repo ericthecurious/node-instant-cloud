@@ -13,6 +13,8 @@ export default class CloudHostTest extends AbstractSpruceTest {
     protected static async beforeEach() {
         await super.beforeEach()
 
+        this.fakeClientFunction()
+
         this.apiToken = generateId()
         this.host = this.CloudHost()
     }
@@ -79,6 +81,13 @@ export default class CloudHostTest extends AbstractSpruceTest {
 
     private static spinupHost() {
         return this.host.spinup()
+    }
+
+    private static fakeClientFunction() {
+        // Sane default fake to avoid calling real client
+        CloudHostImpl.client = () => {
+            return this.FakeClient()
+        }
     }
 
     private static FakeClient() {
