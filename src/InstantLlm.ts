@@ -1,6 +1,6 @@
 import CloudHostImpl, { CloudHost } from './CloudHost'
 
-export default class InstantLlmImpl {
+export default class InstantLlmImpl implements InstantLlm {
     public static Class?: InstantLlmConstructor
 
     protected host: CloudHost
