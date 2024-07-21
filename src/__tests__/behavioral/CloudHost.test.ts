@@ -22,7 +22,7 @@ export default class CloudHostTest extends AbstractSpruceTest {
 
     @test()
     protected static async canCreateCloudHost() {
-        assert.isTruthy(this.host)
+        assert.isTruthy(this.host, 'Instance was not created!')
     }
 
     @test()

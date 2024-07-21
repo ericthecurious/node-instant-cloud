@@ -24,15 +24,19 @@ export default class InstantLlmTest extends AbstractSpruceTest {
 
     @test()
     protected static async canCreateInstantLlm() {
-        assert.isTruthy(this.llm)
+        assert.isTruthy(this.llm, 'Instance was not created!')
     }
 
     @test()
     protected static async runCallsSpinupOnCloudHost() {
         await this.llm.run()
 
-        const host = this.llm.getCloudHost() as FakeCloudHost
-        assert.isTrue(host.wasSpinupCalled)
+        const host = this.getCloudHost()
+        assert.isTrue(host.wasSpinupCalled, 'Spinup was not called on host!')
+    }
+
+    private static getCloudHost() {
+        return this.llm.getCloudHost() as FakeCloudHost
     }
 
     private static InstantLlm() {
