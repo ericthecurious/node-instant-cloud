@@ -4,14 +4,18 @@ export default class CloudHostImpl implements CloudHost {
     public static Class?: CloudHostConstructor
     public static client = digitalocean.client
 
-    protected constructor() {}
+    private apiToken: string
 
-    public static Create() {
-        return new (this.Class ?? this)()
+    protected constructor(apiToken: string) {
+        this.apiToken = apiToken
+    }
+
+    public static Create(apiToken: string) {
+        return new (this.Class ?? this)(apiToken)
     }
 
     public async spinup() {
-        CloudHostImpl.client('')
+        CloudHostImpl.client(this.apiToken)
     }
 }
 
@@ -19,4 +23,4 @@ export interface CloudHost {
     spinup(): Promise<void>
 }
 
-export type CloudHostConstructor = new () => CloudHost
+export type CloudHostConstructor = new (apiToken: string) => CloudHost

@@ -1,13 +1,19 @@
-import AbstractSpruceTest, { test, assert } from '@sprucelabs/test-utils'
+import AbstractSpruceTest, {
+    test,
+    assert,
+    generateId,
+} from '@sprucelabs/test-utils'
 import { DigitalOceanClient } from 'digitalocean'
 import CloudHostImpl, { CloudHost } from '../../CloudHost'
 
 export default class CloudHostTest extends AbstractSpruceTest {
+    private static apiToken: string
     private static host: CloudHost
 
     protected static async beforeEach() {
         await super.beforeEach()
 
+        this.apiToken = generateId()
         this.host = this.CloudHost()
     }
 
@@ -30,7 +36,21 @@ export default class CloudHostTest extends AbstractSpruceTest {
         assert.isTrue(wasHit)
     }
 
+    @test()
+    protected static async passesApiTokenToClient() {
+        let token = ''
+
+        CloudHostImpl.client = (apiToken: string) => {
+            token = apiToken
+            return {} as DigitalOceanClient
+        }
+
+        await this.host.spinup()
+
+        assert.isEqual(token, this.apiToken)
+    }
+
     private static CloudHost() {
-        return CloudHostImpl.Create()
+        return CloudHostImpl.Create(this.apiToken)
     }
 }
