@@ -1,4 +1,8 @@
-import AbstractSpruceTest, { test, assert } from '@sprucelabs/test-utils'
+import AbstractSpruceTest, {
+    test,
+    assert,
+    generateId,
+} from '@sprucelabs/test-utils'
 import CloudHostImpl from '../../CloudHost'
 import InstantLlmImpl from '../../InstantLlm'
 import { FakeCloudHost } from '../testDoubles/FakeCloudHost'
@@ -6,6 +10,7 @@ import { SpyInstantLlm } from '../testDoubles/SpyInstantLlm'
 
 export default class InstantLlmTest extends AbstractSpruceTest {
     private static llm: SpyInstantLlm
+    private static apiToken: string
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -13,6 +18,7 @@ export default class InstantLlmTest extends AbstractSpruceTest {
         InstantLlmImpl.Class = SpyInstantLlm
         CloudHostImpl.Class = FakeCloudHost
 
+        this.apiToken = generateId()
         this.llm = this.InstantLlm()
     }
 
@@ -30,6 +36,6 @@ export default class InstantLlmTest extends AbstractSpruceTest {
     }
 
     private static InstantLlm() {
-        return InstantLlmImpl.Create() as SpyInstantLlm
+        return InstantLlmImpl.Create(this.apiToken) as SpyInstantLlm
     }
 }

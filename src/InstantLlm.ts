@@ -9,8 +9,8 @@ export default class InstantLlmImpl implements InstantLlm {
         this.host = host
     }
 
-    public static Create() {
-        const host = this.CloudHost()
+    public static Create(apiToken: string) {
+        const host = this.CloudHost(apiToken)
         return new (this.Class ?? this)(host)
     }
 
@@ -18,8 +18,8 @@ export default class InstantLlmImpl implements InstantLlm {
         await this.host.spinup()
     }
 
-    private static CloudHost() {
-        return CloudHostImpl.Create()
+    private static CloudHost(apiToken: string) {
+        return CloudHostImpl.Create(apiToken)
     }
 }
 
