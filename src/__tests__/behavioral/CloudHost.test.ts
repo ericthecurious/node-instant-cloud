@@ -8,8 +8,9 @@ import CloudHostImpl, { CloudHost } from '../../CloudHost'
 import FakeDigitalOceanClient from '../testDoubles/FakeDigitalOceanClient'
 
 export default class CloudHostTest extends AbstractSpruceTest {
-    private static apiToken: string
     private static host: CloudHost
+
+    private static apiToken: string
     private static hostName: string
     private static hostRegion: string
     private static hostSize: string
