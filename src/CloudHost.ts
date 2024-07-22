@@ -4,14 +4,12 @@ export default class CloudHostImpl implements CloudHost {
     public static Class?: CloudHostConstructor
     public static client = client
 
-    protected apiToken: string
     private createOptions: CreateDropletOptions
     private client: DigitalOceanClient
 
     protected constructor(options: CloudHostConstructorOptions) {
-        const { apiToken, createOptions, client } = options
+        const { createOptions, client } = options
 
-        this.apiToken = apiToken
         this.createOptions = createOptions
         this.client = client
     }
@@ -21,7 +19,7 @@ export default class CloudHostImpl implements CloudHost {
         createOptions: CreateDropletOptions
     ) {
         const client = CloudHostImpl.client(apiToken)
-        return new (this.Class ?? this)({ apiToken, createOptions, client })
+        return new (this.Class ?? this)({ createOptions, client })
     }
 
     public async spinup() {
@@ -38,7 +36,6 @@ export type CloudHostConstructor = new (
 ) => CloudHost
 
 interface CloudHostConstructorOptions {
-    apiToken: string
     createOptions: CreateDropletOptions
     client: DigitalOceanClient
 }
