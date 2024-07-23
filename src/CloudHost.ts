@@ -35,7 +35,7 @@ export type CloudHostConstructor = new (
     options: CloudHostConstructorOptions
 ) => CloudHost
 
-interface CloudHostConstructorOptions {
+export interface CloudHostConstructorOptions {
     createOptions: CreateDropletOptions
     client: DigitalOceanClient
 }

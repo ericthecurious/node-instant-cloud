@@ -35,6 +35,24 @@ export default class InstantLlmTest extends AbstractSpruceTest {
         assert.isTrue(host.wasSpinupCalled, 'Spinup was not called on host!')
     }
 
+    @test()
+    protected static async passesCorrectCreateOptionsToCloudHost() {
+        await this.llm.run()
+
+        const host = this.getCloudHost()
+
+        assert.isEqualDeep(
+            host.passedOptions?.createOptions,
+            {
+                name: 'example-droplet',
+                region: 'nyc3',
+                size: 's-1vcpu-1gb',
+                image: 'ubuntu-20-04-x64',
+            },
+            'Invalid create options passed to host!'
+        )
+    }
+
     private static getCloudHost() {
         return this.llm.getCloudHost() as FakeCloudHost
     }
