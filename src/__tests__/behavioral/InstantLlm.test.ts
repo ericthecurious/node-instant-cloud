@@ -4,7 +4,7 @@ import AbstractSpruceTest, {
     generateId,
 } from '@sprucelabs/test-utils'
 import DigitalOceanHost from '../../DigitalOceanHost'
-import InstantLlmImpl from '../../InstantLlm'
+import InstantLlmImpl, { InstantLlmOptions } from '../../InstantLlm'
 import { FakeCloudHost } from '../testDoubles/FakeCloudHost'
 import { SpyInstantLlm } from '../testDoubles/SpyInstantLlm'
 
@@ -36,9 +36,7 @@ export default class InstantLlmTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async passesCorrectCreateOptionsToCloudHost() {
-        await this.llm.run()
-
+    protected static async passesCorrectOptionsToCloudHost() {
         const host = this.getCloudHost()
 
         assert.isEqualDeep(
@@ -54,13 +52,29 @@ export default class InstantLlmTest extends AbstractSpruceTest {
         )
     }
 
-    private static getCloudHost() {
-        return this.llm.getCloudHost() as FakeCloudHost
+    @test()
+    protected static async passingHostTypeReturnsCorrectType() {
+        delete DigitalOceanHost.Class
+
+        const llm = this.InstantLlm({ hostType: 'digitalocean' })
+        const host = llm.getCloudHost()
+
+        assert.isEqual(
+            host.constructor.name,
+            'DigitalOceanHost',
+            `Invalid host type for ${'digitalocean'}!`
+        )
     }
 
-    private static InstantLlm() {
+    private static getCloudHost(llm?: SpyInstantLlm) {
+        return (llm ?? this.llm).getCloudHost() as FakeCloudHost
+    }
+
+    private static InstantLlm(options?: Partial<InstantLlmOptions>) {
         return InstantLlmImpl.Create({
+            hostType: 'digitalocean',
             apiToken: this.apiToken,
+            ...options,
         }) as SpyInstantLlm
     }
 }

@@ -1,8 +1,11 @@
 import DigitalOceanHost from './DigitalOceanHost'
 
 export default class CloudHostFactory {
-    public static Create(options: CloudHostOptions) {
-        return DigitalOceanHost.Create(options)
+    public static Create(hostType: CloudHostType, options: CloudHostOptions) {
+        switch (hostType) {
+            case 'digitalocean':
+                return DigitalOceanHost.Create(options)
+        }
     }
 }
 

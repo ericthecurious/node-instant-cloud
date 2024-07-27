@@ -1,4 +1,4 @@
-import CloudHostFactory, { CloudHost } from './CloudHostFactory'
+import CloudHostFactory, { CloudHost, CloudHostType } from './CloudHostFactory'
 
 export default class InstantLlmImpl implements InstantLlm {
     public static Class?: InstantLlmConstructor
@@ -10,8 +10,8 @@ export default class InstantLlmImpl implements InstantLlm {
     }
 
     public static Create(options: InstantLlmOptions) {
-        const { apiToken } = options
-        const host = this.CloudHost(apiToken)
+        const { hostType, apiToken } = options
+        const host = this.CloudHost(hostType, apiToken)
 
         return new (this.Class ?? this)(host)
     }
@@ -20,14 +20,15 @@ export default class InstantLlmImpl implements InstantLlm {
         await this.host.spinup()
     }
 
-    private static CloudHost(apiToken: string) {
-        const createOptions = {
+    private static CloudHost(hostType: CloudHostType, apiToken: string) {
+        const options = {
+            apiToken,
             name: 'example-droplet',
             region: 'nyc3',
             size: 's-1vcpu-1gb',
             image: 'ubuntu-20-04-x64',
         }
-        return CloudHostFactory.Create({ apiToken, ...createOptions })
+        return CloudHostFactory.Create(hostType, options)
     }
 }
 
@@ -38,5 +39,6 @@ export interface InstantLlm {
 export type InstantLlmConstructor = new (host: CloudHost) => InstantLlm
 
 export interface InstantLlmOptions {
+    hostType: CloudHostType
     apiToken: string
 }
