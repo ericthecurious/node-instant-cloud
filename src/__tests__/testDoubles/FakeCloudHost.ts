@@ -1,4 +1,4 @@
-import { CloudHost, CloudHostOptions } from '../../CloudHostFactory'
+import { CloudHost, CloudHostOptions } from '../../hosts/CloudHostFactory'
 
 export class FakeCloudHost implements CloudHost {
     public passedOptions?: CloudHostOptions

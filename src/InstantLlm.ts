@@ -1,4 +1,7 @@
-import CloudHostFactory, { CloudHost, CloudHostType } from './CloudHostFactory'
+import CloudHostFactory, {
+    CloudHost,
+    CloudHostType,
+} from './hosts/CloudHostFactory'
 
 export default class InstantLlmImpl implements InstantLlm {
     public static Class?: InstantLlmConstructor

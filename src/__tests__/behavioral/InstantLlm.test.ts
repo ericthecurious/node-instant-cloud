@@ -3,8 +3,8 @@ import AbstractSpruceTest, {
     assert,
     generateId,
 } from '@sprucelabs/test-utils'
-import { CloudHostType } from '../../CloudHostFactory'
-import DigitalOceanHost from '../../DigitalOceanHost'
+import { CloudHostType } from '../../hosts/CloudHostFactory'
+import DigitalOceanHost from '../../hosts/digitalocean/DigitalOceanHost'
 import InstantLlmImpl, { InstantLlmOptions } from '../../InstantLlm'
 import { FakeCloudHost } from '../testDoubles/FakeCloudHost'
 import { SpyInstantLlm } from '../testDoubles/SpyInstantLlm'

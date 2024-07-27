@@ -1,5 +1,5 @@
 import AbstractSpruceTest, { test, assert } from '@sprucelabs/test-utils'
-import AzureHost from '../../AzureHost'
+import AzureHost from '../../hosts/azure/AzureHost'
 
 export default class AzureHostTest extends AbstractSpruceTest {
     protected static async beforeEach() {

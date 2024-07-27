@@ -3,7 +3,7 @@ import {
     CloudHost,
     CloudHostConstructor,
     CloudHostOptions,
-} from './CloudHostFactory'
+} from '../CloudHostFactory'
 
 export default class DigitalOceanHost implements CloudHost {
     public static Class?: CloudHostConstructor

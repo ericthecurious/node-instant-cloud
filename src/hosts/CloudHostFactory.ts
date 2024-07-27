@@ -1,5 +1,5 @@
-import AzureHost from './AzureHost'
-import DigitalOceanHost from './DigitalOceanHost'
+import AzureHost from './azure/AzureHost'
+import DigitalOceanHost from './digitalocean/DigitalOceanHost'
 
 export default class CloudHostFactory {
     public static Create(hostType: CloudHostType, apiToken: string) {

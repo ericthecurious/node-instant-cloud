@@ -2,7 +2,7 @@ import {
     CloudHost,
     CloudHostConstructor,
     CloudHostOptions,
-} from './CloudHostFactory'
+} from '../CloudHostFactory'
 
 export default class AzureHost implements CloudHost {
     public static Class?: CloudHostConstructor
