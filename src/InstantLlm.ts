@@ -21,14 +21,7 @@ export default class InstantLlmImpl implements InstantLlm {
     }
 
     private static CloudHost(hostType: CloudHostType, apiToken: string) {
-        const options = {
-            apiToken,
-            name: 'example-droplet',
-            region: 'nyc3',
-            size: 's-1vcpu-1gb',
-            image: 'ubuntu-20-04-x64',
-        }
-        return CloudHostFactory.Create(hostType, options)
+        return CloudHostFactory.Create(hostType, apiToken)
     }
 }
 

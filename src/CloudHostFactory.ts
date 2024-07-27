@@ -2,7 +2,14 @@ import AzureHost from './AzureHost'
 import DigitalOceanHost from './DigitalOceanHost'
 
 export default class CloudHostFactory {
-    public static Create(hostType: CloudHostType, options: CloudHostOptions) {
+    public static Create(hostType: CloudHostType, apiToken: string) {
+        const options = {
+            apiToken,
+            name: 'example-droplet',
+            region: 'nyc3',
+            size: 's-1vcpu-1gb',
+            image: 'ubuntu-20-04-x64',
+        }
         switch (hostType) {
             case 'digitalocean':
                 return DigitalOceanHost.Create(options)
