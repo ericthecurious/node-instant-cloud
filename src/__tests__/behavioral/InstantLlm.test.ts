@@ -3,7 +3,7 @@ import AbstractSpruceTest, {
     assert,
     generateId,
 } from '@sprucelabs/test-utils'
-import CloudHostImpl from '../../CloudHost'
+import DigitalOceanHost from '../../DigitalOceanHost'
 import InstantLlmImpl from '../../InstantLlm'
 import { FakeCloudHost } from '../testDoubles/FakeCloudHost'
 import { SpyInstantLlm } from '../testDoubles/SpyInstantLlm'
@@ -16,7 +16,7 @@ export default class InstantLlmTest extends AbstractSpruceTest {
         await super.beforeEach()
 
         InstantLlmImpl.Class = SpyInstantLlm
-        CloudHostImpl.Class = FakeCloudHost
+        DigitalOceanHost.Class = FakeCloudHost
 
         this.apiToken = generateId()
         this.llm = this.InstantLlm()

@@ -1,4 +1,4 @@
-import { CloudHost, CloudHostConstructorOptions } from '../../CloudHost'
+import { CloudHost, CloudHostConstructorOptions } from '../../DigitalOceanHost'
 
 export class FakeCloudHost implements CloudHost {
     public wasSpinupCalled = false

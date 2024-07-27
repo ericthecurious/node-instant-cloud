@@ -1,6 +1,6 @@
 import { CreateDropletOptions, DigitalOceanClient, client } from 'digitalocean'
 
-export default class CloudHostImpl implements CloudHost {
+export default class DigitalOceanHost implements CloudHost {
     public static Class?: CloudHostConstructor
     public static client = client
 
@@ -18,7 +18,7 @@ export default class CloudHostImpl implements CloudHost {
         apiToken: string,
         createOptions: CreateDropletOptions
     ) {
-        const client = CloudHostImpl.client(apiToken)
+        const client = DigitalOceanHost.client(apiToken)
         return new (this.Class ?? this)({ createOptions, client })
     }
 

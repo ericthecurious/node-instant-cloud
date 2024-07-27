@@ -1,4 +1,4 @@
-import CloudHostImpl, { CloudHost } from './CloudHost'
+import DigitalOceanHost, { CloudHost } from './DigitalOceanHost'
 
 export default class InstantLlmImpl implements InstantLlm {
     public static Class?: InstantLlmConstructor
@@ -25,7 +25,7 @@ export default class InstantLlmImpl implements InstantLlm {
             size: 's-1vcpu-1gb',
             image: 'ubuntu-20-04-x64',
         }
-        return CloudHostImpl.Create(apiToken, createOptions)
+        return DigitalOceanHost.Create(apiToken, createOptions)
     }
 }
 

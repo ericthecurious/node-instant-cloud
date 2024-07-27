@@ -1,4 +1,4 @@
-import { CloudHost } from '../../CloudHost'
+import { CloudHost } from '../../DigitalOceanHost'
 import InstantLlmImpl from '../../InstantLlm'
 
 export class SpyInstantLlm extends InstantLlmImpl {
