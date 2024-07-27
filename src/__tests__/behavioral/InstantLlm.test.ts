@@ -3,6 +3,7 @@ import AbstractSpruceTest, {
     assert,
     generateId,
 } from '@sprucelabs/test-utils'
+import { CloudHostType } from '../../CloudHostFactory'
 import DigitalOceanHost from '../../DigitalOceanHost'
 import InstantLlmImpl, { InstantLlmOptions } from '../../InstantLlm'
 import { FakeCloudHost } from '../testDoubles/FakeCloudHost'
@@ -52,17 +53,31 @@ export default class InstantLlmTest extends AbstractSpruceTest {
         )
     }
 
-    @test()
-    protected static async passingHostTypeReturnsCorrectType() {
+    @test('passingHostTypeReturnsCorrectType: azure', 'azure')
+    @test('passingHostTypeReturnsCorrectType: digitalocean', 'digitalocean')
+    protected static async passingHostTypeReturnsCorrectConcreteClass(
+        hostType: CloudHostType
+    ) {
         delete DigitalOceanHost.Class
 
-        const llm = this.InstantLlm({ hostType: 'digitalocean' })
+        const llm = this.InstantLlm({ hostType })
         const host = llm.getCloudHost()
+
+        let expectedHostClass: any
+
+        switch (hostType) {
+            case 'digitalocean':
+                expectedHostClass = 'DigitalOceanHost'
+                break
+            case 'azure':
+                expectedHostClass = 'AzureHost'
+                break
+        }
 
         assert.isEqual(
             host.constructor.name,
-            'DigitalOceanHost',
-            `Invalid host type for ${'digitalocean'}!`
+            expectedHostClass,
+            `Invalid host type for ${hostType}!`
         )
     }
 

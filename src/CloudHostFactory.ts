@@ -1,3 +1,4 @@
+import AzureHost from './AzureHost'
 import DigitalOceanHost from './DigitalOceanHost'
 
 export default class CloudHostFactory {
@@ -5,6 +6,8 @@ export default class CloudHostFactory {
         switch (hostType) {
             case 'digitalocean':
                 return DigitalOceanHost.Create(options)
+            case 'azure':
+                return AzureHost.Create(options)
         }
     }
 }
@@ -23,4 +26,4 @@ export interface CloudHostOptions {
     image: string
 }
 
-export type CloudHostType = 'digitalocean'
+export type CloudHostType = 'digitalocean' | 'azure'

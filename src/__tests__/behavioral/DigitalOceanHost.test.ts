@@ -31,7 +31,7 @@ export default class DigitalOceanHostTest extends AbstractSpruceTest {
     }
 
     @test()
-    protected static async canCreateCloudHost() {
+    protected static async canCreateDigitalOceanHost() {
         assert.isTruthy(this.host, 'Instance was not created!')
     }
 
