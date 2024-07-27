@@ -42,8 +42,9 @@ export default class InstantLlmTest extends AbstractSpruceTest {
         const host = this.getCloudHost()
 
         assert.isEqualDeep(
-            host.passedOptions?.createOptions,
+            host.passedOptions,
             {
+                apiToken: this.apiToken,
                 name: 'example-droplet',
                 region: 'nyc3',
                 size: 's-1vcpu-1gb',

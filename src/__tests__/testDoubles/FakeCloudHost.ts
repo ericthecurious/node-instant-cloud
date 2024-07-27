@@ -1,10 +1,10 @@
-import { CloudHost, CloudHostConstructorOptions } from '../../DigitalOceanHost'
+import { CloudHost, CloudHostOptions } from '../../CloudHostFactory'
 
 export class FakeCloudHost implements CloudHost {
     public wasSpinupCalled = false
-    public passedOptions: CloudHostConstructorOptions | undefined
+    public passedOptions?: CloudHostOptions
 
-    public constructor(options: CloudHostConstructorOptions) {
+    public constructor(options: CloudHostOptions) {
         this.passedOptions = options
     }
 

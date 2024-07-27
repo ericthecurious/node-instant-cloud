@@ -4,17 +4,17 @@ import AbstractSpruceTest, {
     generateId,
 } from '@sprucelabs/test-utils'
 import { CreateDropletOptions, DigitalOceanClient, Droplet } from 'digitalocean'
-import DigitalOceanHost, { CloudHost } from '../../DigitalOceanHost'
+import { CloudHost } from '../../CloudHostFactory'
+import DigitalOceanHost from '../../DigitalOceanHost'
 import FakeDigitalOceanClient from '../testDoubles/FakeDigitalOceanClient'
 
-export default class CloudHostTest extends AbstractSpruceTest {
+export default class DigitalOceanHostTest extends AbstractSpruceTest {
     private static host: CloudHost
-
-    private static apiToken: string
     private static hostName: string
     private static hostRegion: string
     private static hostSize: string
     private static hostImage: string
+    private static apiToken: string
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -101,7 +101,6 @@ export default class CloudHostTest extends AbstractSpruceTest {
     }
 
     private static fakeClientFunction() {
-        // Sane default fake to avoid calling real client
         DigitalOceanHost.client = () => {
             return this.FakeClient()
         }
@@ -112,6 +111,9 @@ export default class CloudHostTest extends AbstractSpruceTest {
     }
 
     private static CloudHost() {
-        return DigitalOceanHost.Create(this.apiToken, this.createOptions)
+        return DigitalOceanHost.Create({
+            apiToken: this.apiToken,
+            ...this.createOptions,
+        })
     }
 }

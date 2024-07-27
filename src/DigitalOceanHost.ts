@@ -1,41 +1,44 @@
-import { CreateDropletOptions, DigitalOceanClient, client } from 'digitalocean'
+import { client } from 'digitalocean'
+import {
+    CloudHost,
+    CloudHostConstructor,
+    CloudHostOptions,
+} from './CloudHostFactory'
 
 export default class DigitalOceanHost implements CloudHost {
     public static Class?: CloudHostConstructor
     public static client = client
 
-    private createOptions: CreateDropletOptions
-    private client: DigitalOceanClient
+    private apiToken: string
+    private name: string
+    private region: string
+    private size: string
+    private image: string
 
-    protected constructor(options: CloudHostConstructorOptions) {
-        const { createOptions, client } = options
+    protected constructor(options: CloudHostOptions) {
+        const { apiToken, name, region, size, image } = options
 
-        this.createOptions = createOptions
-        this.client = client
+        this.apiToken = apiToken
+        this.name = name
+        this.region = region
+        this.size = size
+        this.image = image
     }
 
-    public static Create(
-        apiToken: string,
-        createOptions: CreateDropletOptions
-    ) {
-        const client = DigitalOceanHost.client(apiToken)
-        return new (this.Class ?? this)({ createOptions, client })
+    public static Create(options: CloudHostOptions) {
+        return new (this.Class ?? this)(options)
     }
 
     public async spinup() {
-        await this.client.droplets.create(this.createOptions)
+        await this.client.droplets.create({
+            name: this.name,
+            region: this.region,
+            size: this.size,
+            image: this.image,
+        })
     }
-}
 
-export interface CloudHost {
-    spinup(): Promise<void>
-}
-
-export type CloudHostConstructor = new (
-    options: CloudHostConstructorOptions
-) => CloudHost
-
-export interface CloudHostConstructorOptions {
-    createOptions: CreateDropletOptions
-    client: DigitalOceanClient
+    private get client() {
+        return DigitalOceanHost.client(this.apiToken)
+    }
 }
