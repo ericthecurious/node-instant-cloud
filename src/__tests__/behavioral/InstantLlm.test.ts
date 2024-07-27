@@ -59,6 +59,8 @@ export default class InstantLlmTest extends AbstractSpruceTest {
     }
 
     private static InstantLlm() {
-        return InstantLlmImpl.Create(this.apiToken) as SpyInstantLlm
+        return InstantLlmImpl.Create({
+            apiToken: this.apiToken,
+        }) as SpyInstantLlm
     }
 }

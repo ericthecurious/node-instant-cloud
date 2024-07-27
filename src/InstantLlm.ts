@@ -9,8 +9,10 @@ export default class InstantLlmImpl implements InstantLlm {
         this.host = host
     }
 
-    public static Create(apiToken: string) {
+    public static Create(options: InstantLlmOptions) {
+        const { apiToken } = options
         const host = this.CloudHost(apiToken)
+
         return new (this.Class ?? this)(host)
     }
 
@@ -34,3 +36,7 @@ export interface InstantLlm {
 }
 
 export type InstantLlmConstructor = new (host: CloudHost) => InstantLlm
+
+export interface InstantLlmOptions {
+    apiToken: string
+}
