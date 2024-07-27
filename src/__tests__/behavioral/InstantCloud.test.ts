@@ -5,32 +5,32 @@ import AbstractSpruceTest, {
 } from '@sprucelabs/test-utils'
 import { CloudHostType } from '../../hosts/CloudHostFactory'
 import DigitalOceanHost from '../../hosts/digitalocean/DigitalOceanHost'
-import InstantLlmImpl, { InstantLlmOptions } from '../../InstantLlm'
+import InstantCloudImpl, { InstantCloudOptions } from '../../InstantCloud'
 import { FakeCloudHost } from '../testDoubles/FakeCloudHost'
-import { SpyInstantLlm } from '../testDoubles/SpyInstantLlm'
+import { SpyInstantCloud } from '../testDoubles/SpyInstantCloud'
 
-export default class InstantLlmTest extends AbstractSpruceTest {
-    private static llm: SpyInstantLlm
+export default class InstantCloudTest extends AbstractSpruceTest {
+    private static cloud: SpyInstantCloud
     private static apiToken: string
 
     protected static async beforeEach() {
         await super.beforeEach()
 
-        InstantLlmImpl.Class = SpyInstantLlm
+        InstantCloudImpl.Class = SpyInstantCloud
         DigitalOceanHost.Class = FakeCloudHost
 
         this.apiToken = generateId()
-        this.llm = this.InstantLlm()
+        this.cloud = this.InstantCloud()
     }
 
     @test()
-    protected static async canCreateInstantLlm() {
-        assert.isTruthy(this.llm, 'Instance was not created!')
+    protected static async canCreateInstantCloud() {
+        assert.isTruthy(this.cloud, 'Instance was not created!')
     }
 
     @test()
     protected static async runCallsSpinupOnCloudHost() {
-        await this.llm.run()
+        await this.cloud.run()
 
         const host = this.getCloudHost()
         assert.isTrue(host.wasSpinupCalled, 'Spinup was not called on host!')
@@ -60,8 +60,8 @@ export default class InstantLlmTest extends AbstractSpruceTest {
     ) {
         delete DigitalOceanHost.Class
 
-        const llm = this.InstantLlm({ hostType })
-        const host = llm.getCloudHost()
+        const cloud = this.InstantCloud({ hostType })
+        const host = cloud.getCloudHost()
 
         let expectedHostClass: any
 
@@ -81,15 +81,15 @@ export default class InstantLlmTest extends AbstractSpruceTest {
         )
     }
 
-    private static getCloudHost(llm?: SpyInstantLlm) {
-        return (llm ?? this.llm).getCloudHost() as FakeCloudHost
+    private static getCloudHost(cloud?: SpyInstantCloud) {
+        return (cloud ?? this.cloud).getCloudHost() as FakeCloudHost
     }
 
-    private static InstantLlm(options?: Partial<InstantLlmOptions>) {
-        return InstantLlmImpl.Create({
+    private static InstantCloud(options?: Partial<InstantCloudOptions>) {
+        return InstantCloudImpl.Create({
             hostType: 'digitalocean',
             apiToken: this.apiToken,
             ...options,
-        }) as SpyInstantLlm
+        }) as SpyInstantCloud
     }
 }

@@ -1,7 +1,7 @@
 {
-  "name": "node-instant-llm",
+  "name": "node-instant-cloud",
   "version": "0.0.1",
-  "repository": "https://github.com/neurodevs/node-instant-llm.git",
+  "repository": "https://github.com/neurodevs/node-instant-cloud.git",
   "scripts": {
     "build.ci": "yarn run build.tsc && yarn run build.resolve-paths && yarn run lint",
     "build.dev": "yarn run build.tsc --sourceMap ; yarn run resolve-paths.lint",
@@ -40,9 +40,9 @@
     "tsc-watch": "^6.2.0",
     "typescript": "^5.5.3"
   },
-  "description": "Quickly spin up a cloud compute instance and serve LLM predictions",
+  "description": "Quickly spin up a cloud compute instance for various cloud hosts",
   "skill": {
-    "namespace": "node-instant-llm"
+    "namespace": "node-instant-cloud"
   },
   "jest": {
     "testRunner": "jest-circus/runner",

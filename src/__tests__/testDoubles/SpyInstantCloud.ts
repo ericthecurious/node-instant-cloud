@@ -1,7 +1,7 @@
 import { CloudHost } from '../../hosts/CloudHostFactory'
-import InstantLlmImpl from '../../InstantLlm'
+import InstantCloudImpl from '../../InstantCloud'
 
-export class SpyInstantLlm extends InstantLlmImpl {
+export class SpyInstantCloud extends InstantCloudImpl {
     public constructor(host: CloudHost) {
         super(host)
     }

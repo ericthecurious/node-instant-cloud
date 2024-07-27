@@ -3,8 +3,8 @@ import CloudHostFactory, {
     CloudHostType,
 } from './hosts/CloudHostFactory'
 
-export default class InstantLlmImpl implements InstantLlm {
-    public static Class?: InstantLlmConstructor
+export default class InstantCloudImpl implements InstantCloud {
+    public static Class?: InstantCloudConstructor
 
     protected host: CloudHost
 
@@ -12,7 +12,7 @@ export default class InstantLlmImpl implements InstantLlm {
         this.host = host
     }
 
-    public static Create(options: InstantLlmOptions) {
+    public static Create(options: InstantCloudOptions) {
         const { hostType, apiToken } = options
         const host = this.CloudHost(hostType, apiToken)
 
@@ -28,13 +28,13 @@ export default class InstantLlmImpl implements InstantLlm {
     }
 }
 
-export interface InstantLlm {
+export interface InstantCloud {
     run(): Promise<void>
 }
 
-export type InstantLlmConstructor = new (host: CloudHost) => InstantLlm
+export type InstantCloudConstructor = new (host: CloudHost) => InstantCloud
 
-export interface InstantLlmOptions {
+export interface InstantCloudOptions {
     hostType: CloudHostType
     apiToken: string
 }
