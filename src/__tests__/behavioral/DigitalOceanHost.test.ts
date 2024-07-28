@@ -1,14 +1,11 @@
-import AbstractSpruceTest, {
-    test,
-    assert,
-    generateId,
-} from '@sprucelabs/test-utils'
+import { test, assert, generateId } from '@sprucelabs/test-utils'
 import { CreateDropletOptions, DigitalOceanClient, Droplet } from 'digitalocean'
 import { CloudHost } from '../../hosts/CloudHostFactory'
 import DigitalOceanHost from '../../hosts/digitalocean/DigitalOceanHost'
+import AbstractInstantCloudTest from '../AbstractInstantCloudTest'
 import FakeDigitalOceanClient from '../testDoubles/FakeDigitalOceanClient'
 
-export default class DigitalOceanHostTest extends AbstractSpruceTest {
+export default class DigitalOceanHostTest extends AbstractInstantCloudTest {
     private static host: CloudHost
     private static hostName: string
     private static hostRegion: string

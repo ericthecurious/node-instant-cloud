@@ -1,15 +1,12 @@
-import AbstractSpruceTest, {
-    test,
-    assert,
-    generateId,
-} from '@sprucelabs/test-utils'
+import { test, assert, generateId } from '@sprucelabs/test-utils'
 import { CloudHostType } from '../../hosts/CloudHostFactory'
 import DigitalOceanHost from '../../hosts/digitalocean/DigitalOceanHost'
 import InstantCloudImpl, { InstantCloudOptions } from '../../InstantCloud'
+import AbstractInstantCloudTest from '../AbstractInstantCloudTest'
 import { FakeCloudHost } from '../testDoubles/FakeCloudHost'
 import { SpyInstantCloud } from '../testDoubles/SpyInstantCloud'
 
-export default class InstantCloudTest extends AbstractSpruceTest {
+export default class InstantCloudTest extends AbstractInstantCloudTest {
     private static cloud: SpyInstantCloud
     private static apiToken: string
 
