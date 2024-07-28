@@ -31,7 +31,11 @@ export default class AzureHost implements CloudHost {
 
     public async spinup() {
         const credential = this.Credential()
-        this.Client(credential, this.subscriptionId)
+        const client = this.Client(credential, this.subscriptionId)
+
+        await client.deployments.createOrUpdate('instantCloud', {
+            location: 'eastus',
+        })
     }
 
     protected Credential() {

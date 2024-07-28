@@ -7,6 +7,8 @@ import { SpyAzureHost } from '../testDoubles/SpyAzureHost'
 
 export default class AzureHostTest extends AbstractInstantCloudTest {
     private static host: SpyAzureHost
+    private static resourceGroupName: string
+    private static location: string
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -14,6 +16,9 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
         AzureHost.Class = SpyAzureHost
         AzureHost.Credential = FakeDefaultAzureCredential
         AzureHost.Client = FakeResourceManagementClient
+
+        this.resourceGroupName = 'instantCloud'
+        this.location = 'eastus'
 
         this.host = this.AzureHost()
     }
@@ -58,12 +63,46 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
         )
     }
 
+    @test()
+    protected static async spinupCallsCreateOrUpdateOnClient() {
+        await this.host.spinup()
+
+        assert.isTrue(
+            this.wasCreateOrUpdateHit,
+            'createOrUpdate was not called on ResourceManagementClient!'
+        )
+
+        assert.isEqual(
+            this.passedResourceGroupName,
+            this.resourceGroupName,
+            'Invalid resourceGroupName passed to createOrUpdate!'
+        )
+
+        assert.isEqual(
+            this.passedLocation,
+            this.location,
+            'Invalid location passed to createOrUpdate!'
+        )
+    }
+
+    private static get wasCreateOrUpdateHit() {
+        return FakeResourceManagementClient.wasCreateOrUpdateHit
+    }
+
     private static get passedCredential() {
         return FakeResourceManagementClient.passedCredential
     }
 
     private static get passedSubscriptionId() {
         return FakeResourceManagementClient.passedSubscriptionId
+    }
+
+    private static get passedResourceGroupName() {
+        return FakeResourceManagementClient.passedResourceGroupName
+    }
+
+    private static get passedLocation() {
+        return FakeResourceManagementClient.passedLocation
     }
 
     private static AzureHost() {
