@@ -106,8 +106,43 @@ export default class AzureHost implements CloudHost {
                 nicName: {
                     type: 'string',
                 },
+                vnetName: {
+                    type: 'string',
+                    defaultValue: 'instantCloudVNet',
+                },
+                subnetName: {
+                    type: 'string',
+                    defaultValue: 'default',
+                },
+                addressPrefix: {
+                    type: 'string',
+                    defaultValue: '10.0.0.0/16',
+                },
+                subnetPrefix: {
+                    type: 'string',
+                    defaultValue: '10.0.0.0/24',
+                },
             },
             resources: [
+                {
+                    type: 'Microsoft.Network/networkInterfaces',
+                    apiVersion: '2022-03-01',
+                    name: "[parameters('nicName')]",
+                    location: "[parameters('location')]",
+                    properties: {
+                        ipConfigurations: [
+                            {
+                                name: 'ipconfig1',
+                                properties: {
+                                    subnet: {
+                                        id: "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('vnetName'), parameters('subnetName'))]",
+                                    },
+                                    privateIPAllocationMethod: 'Dynamic',
+                                },
+                            },
+                        ],
+                    },
+                },
                 {
                     type: 'Microsoft.Compute/virtualMachines',
                     apiVersion: '2022-03-01',
