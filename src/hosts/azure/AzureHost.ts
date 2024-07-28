@@ -33,7 +33,7 @@ export default class AzureHost implements CloudHost {
         const credential = this.Credential()
         const client = this.Client(credential, this.subscriptionId)
 
-        await client.deployments.createOrUpdate('instantCloud', {
+        await client.resourceGroups.createOrUpdate('instantCloud', {
             location: 'eastus',
         })
     }

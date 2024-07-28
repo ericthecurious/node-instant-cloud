@@ -12,7 +12,7 @@ export default class FakeResourceManagementClient {
         FakeResourceManagementClient.passedSubscriptionId = subscriptionId
     }
 
-    public get deployments() {
+    public get resourceGroups() {
         return {
             createOrUpdate: async (
                 resourceGroupName: string,
