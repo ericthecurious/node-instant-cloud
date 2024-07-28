@@ -63,6 +63,10 @@
     }
   },
   "dependencies": {
+    "@azure/arm-compute": "^22.0.0",
+    "@azure/arm-network": "^33.2.0",
+    "@azure/arm-resources": "^5.2.0",
+    "@azure/identity": "^4.4.0",
     "digitalocean": "^1.2.1"
   }
 }
