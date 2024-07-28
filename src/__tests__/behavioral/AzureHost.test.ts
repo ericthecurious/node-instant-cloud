@@ -7,8 +7,12 @@ import { SpyAzureHost } from '../testDoubles/SpyAzureHost'
 
 export default class AzureHostTest extends AbstractInstantCloudTest {
     private static host: SpyAzureHost
-    private static resourceGroupName: string
-    private static location: string
+    private static resourceGroupName = 'instantCloud'
+    private static deploymentName = 'instantCloudDeployment'
+    private static vmName = 'instantCloudVM'
+    private static vmSize = 'Standard_DS1_v2'
+    private static nicName = 'instantCloudNIC'
+    private static location = 'eastus'
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -16,9 +20,6 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
         AzureHost.Class = SpyAzureHost
         AzureHost.Credential = FakeDefaultAzureCredential
         AzureHost.Client = FakeResourceManagementClient
-
-        this.resourceGroupName = 'instantCloud'
-        this.location = 'eastus'
 
         this.host = this.AzureHost()
     }
@@ -35,7 +36,29 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
         assert.doesThrow(
             () => this.AzureHost(),
             '',
-            'Should throw with missing subscriptionId env!'
+            'Should throw with missing AZURE_SUBSCRIPTION_ID env!'
+        )
+    }
+
+    @test()
+    protected static async throwsWithMissingUserNameEnv() {
+        delete process.env.AZURE_USER_NAME
+
+        assert.doesThrow(
+            () => this.AzureHost(),
+            '',
+            'Should throw with missing AZURE_USER_NAME env!'
+        )
+    }
+
+    @test()
+    protected static async throwsWithMissingUserPasswordEnv() {
+        delete process.env.AZURE_USER_PASSWORD
+
+        assert.doesThrow(
+            () => this.AzureHost(),
+            '',
+            'Should throw with missing AZURE_USER_PASSWORD env!'
         )
     }
 
@@ -85,8 +108,104 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
         )
     }
 
+    @test()
+    protected static async spinupCallsBeginCreateOrUpdateAndWaitOnClient() {
+        await this.host.spinup()
+
+        assert.isTrue(
+            this.wasBeginCreateOrUpdateAndWaitHit,
+            'beginCreateOrUpdateAndWait was not called on ResourceManagementClient!'
+        )
+
+        assert.isEqual(
+            this.passedResourceGroupNameToDeployments,
+            this.resourceGroupName,
+            'Invalid resourceGroupName passed to beginCreateOrUpdateAndWait!'
+        )
+
+        assert.isEqual(
+            this.passedDeploymentsNameToDeployments,
+            this.deploymentName,
+            'Invalid deploymentName passed to beginCreateOrUpdateAndWait!'
+        )
+
+        assert.isEqual(
+            this.passedMode,
+            'Incremental',
+            'Invalid mode passed to beginCreateOrUpdateAndWait!'
+        )
+
+        assert.isEqualDeep(
+            this.passedTemplate,
+            this.expectedTemplate,
+            'Invalid template passed to beginCreateOrUpdateAndWait!'
+        )
+
+        assert.isEqualDeep(
+            this.passedParameters,
+            this.expectedParameters,
+            'Invalid parameters passed to beginCreateOrUpdateAndWait!'
+        )
+    }
+
+    private static get expectedTemplate() {
+        return {
+            $schema:
+                'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#',
+            contentVersion: '1.0.0.0',
+            resources: [
+                {
+                    type: 'Microsoft.Compute/virtualMachines',
+                    apiVersion: '2022-03-01',
+                    name: "[parameters('vmName')]",
+                    location: "[parameters('location')]",
+                    properties: {
+                        hardwareProfile: {
+                            vmSize: "[parameters('vmSize')]",
+                        },
+                        storageProfile: {
+                            imageReference: {
+                                publisher: 'Canonical',
+                                offer: 'UbuntuServer',
+                                sku: '18.04-LTS',
+                                version: 'latest',
+                            },
+                        },
+                        osProfile: {
+                            computerName: "[parameters('vmName')]",
+                            adminUsername: "[parameters('adminUsername')]",
+                            adminPassword: "[parameters('adminPassword')]",
+                        },
+                        networkProfile: {
+                            networkInterfaces: [
+                                {
+                                    id: "[resourceId('Microsoft.Network/networkInterfaces', parameters('nicName'))]",
+                                },
+                            ],
+                        },
+                    },
+                },
+            ],
+        }
+    }
+
+    private static get expectedParameters() {
+        return {
+            vmName: { value: this.vmName },
+            location: { value: this.location },
+            vmSize: { value: this.vmSize },
+            adminUsername: { value: 'azureuser' },
+            adminPassword: { value: 'YourPassword' },
+            nicName: { value: this.nicName },
+        }
+    }
+
     private static get wasCreateOrUpdateHit() {
         return FakeResourceManagementClient.wasCreateOrUpdateHit
+    }
+
+    private static get wasBeginCreateOrUpdateAndWaitHit() {
+        return FakeResourceManagementClient.wasBeginCreateOrUpdateAndWaitHit
     }
 
     private static get passedCredential() {
@@ -103,6 +222,26 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
 
     private static get passedLocation() {
         return FakeResourceManagementClient.passedLocation
+    }
+
+    private static get passedResourceGroupNameToDeployments() {
+        return FakeResourceManagementClient.passedResourceGroupNameToDeployments
+    }
+
+    private static get passedDeploymentsNameToDeployments() {
+        return FakeResourceManagementClient.passedDeploymentNameToDeployments
+    }
+
+    private static get passedMode() {
+        return FakeResourceManagementClient.passedMode
+    }
+
+    private static get passedTemplate() {
+        return FakeResourceManagementClient.passedTemplate
+    }
+
+    private static get passedParameters() {
+        return FakeResourceManagementClient.passedParameters
     }
 
     private static AzureHost() {

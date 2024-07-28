@@ -5,5 +5,7 @@ export default class AbstractInstantCloudTest extends AbstractSpruceTest {
         await super.beforeEach()
 
         process.env.AZURE_SUBSCRIPTION_ID = generateId()
+        process.env.AZURE_USER_NAME = generateId()
+        process.env.AZURE_USER_PASSWORD = generateId()
     }
 }
