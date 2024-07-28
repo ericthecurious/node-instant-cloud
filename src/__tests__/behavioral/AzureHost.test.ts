@@ -153,6 +153,26 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
             $schema:
                 'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#',
             contentVersion: '1.0.0.0',
+            parameters: {
+                vmName: {
+                    type: 'string',
+                },
+                location: {
+                    type: 'string',
+                },
+                vmSize: {
+                    type: 'string',
+                },
+                adminUsername: {
+                    type: 'string',
+                },
+                adminPassword: {
+                    type: 'securestring',
+                },
+                nicName: {
+                    type: 'string',
+                },
+            },
             resources: [
                 {
                     type: 'Microsoft.Compute/virtualMachines',
@@ -194,8 +214,8 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
             vmName: { value: this.vmName },
             location: { value: this.location },
             vmSize: { value: this.vmSize },
-            adminUsername: { value: 'azureuser' },
-            adminPassword: { value: 'YourPassword' },
+            adminUsername: { value: process.env.AZURE_USER_NAME },
+            adminPassword: { value: process.env.AZURE_USER_PASSWORD },
             nicName: { value: this.nicName },
         }
     }

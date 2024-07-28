@@ -27,18 +27,6 @@ export default class AzureHost implements CloudHost {
         this.validateUserPassword()
     }
 
-    private validateUserPassword() {
-        if (!process.env.AZURE_USER_PASSWORD) {
-            throw new Error('Please set AZURE_USER_PASSWORD in your env!')
-        }
-    }
-
-    private validateUserName() {
-        if (!process.env.AZURE_USER_NAME) {
-            throw new Error('Please set AZURE_USER_NAME in your env!')
-        }
-    }
-
     private validateSubscriptionId() {
         if (!this.subscriptionId) {
             throw new Error('Please set AZURE_SUBSCRIPTION_ID in your env!')
@@ -47,6 +35,26 @@ export default class AzureHost implements CloudHost {
 
     private get subscriptionId() {
         return process.env.AZURE_SUBSCRIPTION_ID!
+    }
+
+    private validateUserName() {
+        if (!this.userName) {
+            throw new Error('Please set AZURE_USER_NAME in your env!')
+        }
+    }
+
+    private get userName() {
+        return process.env.AZURE_USER_NAME!
+    }
+
+    private validateUserPassword() {
+        if (!this.userPassword) {
+            throw new Error('Please set AZURE_USER_PASSWORD in your env!')
+        }
+    }
+
+    private get userPassword() {
+        return process.env.AZURE_USER_PASSWORD!
     }
 
     public static Create(options: CloudHostOptions) {
@@ -79,6 +87,26 @@ export default class AzureHost implements CloudHost {
             $schema:
                 'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#',
             contentVersion: '1.0.0.0',
+            parameters: {
+                vmName: {
+                    type: 'string',
+                },
+                location: {
+                    type: 'string',
+                },
+                vmSize: {
+                    type: 'string',
+                },
+                adminUsername: {
+                    type: 'string',
+                },
+                adminPassword: {
+                    type: 'securestring',
+                },
+                nicName: {
+                    type: 'string',
+                },
+            },
             resources: [
                 {
                     type: 'Microsoft.Compute/virtualMachines',
@@ -120,8 +148,8 @@ export default class AzureHost implements CloudHost {
             vmName: { value: this.vmName },
             location: { value: this.location },
             vmSize: { value: 'Standard_DS1_v2' },
-            adminUsername: { value: 'azureuser' },
-            adminPassword: { value: 'YourPassword' },
+            adminUsername: { value: this.userName },
+            adminPassword: { value: this.userPassword },
             nicName: { value: this.nicName },
         }
     }
