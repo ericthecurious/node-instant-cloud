@@ -29,7 +29,7 @@
     "@sprucelabs/resolve-path-aliases": "^2.0.143",
     "@sprucelabs/test": "^9.0.38",
     "@sprucelabs/test-utils": "^5.1.99",
-    "@types/node": "^20.14.11",
+    "@types/node": "^20.14.13",
     "chokidar-cli": "^3.0.0",
     "eslint": "^9.7.0",
     "eslint-config-spruce": "^11.2.26",
@@ -69,6 +69,7 @@
     "@azure/core-client": "^1.9.2",
     "@azure/core-rest-pipeline": "^1.16.2",
     "@azure/identity": "^4.4.0",
-    "digitalocean": "^1.2.1"
+    "digitalocean": "^1.2.1",
+    "dotenv": "^16.4.5"
   }
 }
