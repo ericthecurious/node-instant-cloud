@@ -50,9 +50,11 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
         )
 
         assert.isInstanceOf(this.passedCredential, FakeDefaultAzureCredential)
+
         assert.isEqual(
             this.passedSubscriptionId,
-            process.env.AZURE_SUBSCRIPTION_ID
+            process.env.AZURE_SUBSCRIPTION_ID,
+            'Invalid subscriptionId passed to ResourceManagementClient!'
         )
     }
 
