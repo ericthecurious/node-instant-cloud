@@ -10,6 +10,7 @@ export default class AzureHost implements CloudHost {
     public static Class?: CloudHostConstructor
     public static Credential: any = DefaultAzureCredential
     public static Client: any = ResourceManagementClient
+    private static apiVersion = '2024-03-01'
 
     private readonly resourceGroupName = 'instantCloud'
     private readonly deploymentName = 'instantCloudDeployment'
@@ -18,10 +19,10 @@ export default class AzureHost implements CloudHost {
     private readonly location = 'eastus'
 
     protected constructor(_options: CloudHostOptions) {
-        this.validateEnvVars()
+        this.validateEnv()
     }
 
-    private validateEnvVars() {
+    private validateEnv() {
         this.validateSubscriptionId()
         this.validateUserName()
         this.validateUserPassword()
@@ -84,8 +85,7 @@ export default class AzureHost implements CloudHost {
 
     private get template() {
         return {
-            $schema:
-                'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#',
+            $schema: `https://schema.management.azure.com/schemas/${this.apiVersion}/deploymentTemplate.json#`,
             contentVersion: '1.0.0.0',
             parameters: {
                 vmName: {
@@ -126,7 +126,7 @@ export default class AzureHost implements CloudHost {
             resources: [
                 {
                     type: 'Microsoft.Network/networkInterfaces',
-                    apiVersion: '2022-03-01',
+                    apiVersion: this.apiVersion,
                     name: "[parameters('nicName')]",
                     location: "[parameters('location')]",
                     properties: {
@@ -145,7 +145,7 @@ export default class AzureHost implements CloudHost {
                 },
                 {
                     type: 'Microsoft.Compute/virtualMachines',
-                    apiVersion: '2022-03-01',
+                    apiVersion: this.apiVersion,
                     name: "[parameters('vmName')]",
                     location: "[parameters('location')]",
                     properties: {
@@ -187,6 +187,10 @@ export default class AzureHost implements CloudHost {
             adminPassword: { value: this.userPassword },
             nicName: { value: this.nicName },
         }
+    }
+
+    private get apiVersion() {
+        return AzureHost.apiVersion
     }
 
     protected Credential() {

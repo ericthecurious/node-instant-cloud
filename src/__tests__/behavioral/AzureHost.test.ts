@@ -13,6 +13,7 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
     private static vmName = 'instantCloudVM'
     private static vmSize = 'Standard_DS1_v2'
     private static location = 'eastus'
+    private static apiVersion = '2024-03-01'
 
     protected static async beforeEach() {
         await super.beforeEach()
@@ -151,7 +152,7 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
     private static get expectedTemplate() {
         return {
             $schema:
-                'https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#',
+                'https://schema.management.azure.com/schemas/2024-03-01/deploymentTemplate.json#',
             contentVersion: '1.0.0.0',
             parameters: {
                 vmName: {
@@ -192,7 +193,7 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
             resources: [
                 {
                     type: 'Microsoft.Network/networkInterfaces',
-                    apiVersion: '2022-03-01',
+                    apiVersion: this.apiVersion,
                     name: "[parameters('nicName')]",
                     location: "[parameters('location')]",
                     properties: {
@@ -211,7 +212,7 @@ export default class AzureHostTest extends AbstractInstantCloudTest {
                 },
                 {
                     type: 'Microsoft.Compute/virtualMachines',
-                    apiVersion: '2022-03-01',
+                    apiVersion: this.apiVersion,
                     name: "[parameters('vmName')]",
                     location: "[parameters('location')]",
                     properties: {
